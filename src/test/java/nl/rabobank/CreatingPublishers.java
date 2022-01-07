@@ -75,9 +75,10 @@ class CreatingPublishers
     @DisplayName("Just or empty with optional or null values")
     void justOrEmpty()
     {
-        final var emptyOptional = Mono.justOrEmpty(Optional.empty());
+        final var nonNullValue = Mono.justOrEmpty(VALUE);
 
-        StepVerifier.create(emptyOptional)
+        StepVerifier.create(nonNullValue)
+                .expectNext(VALUE)
                 .verifyComplete();
 
         final var optional = Optional.of(VALUE);
@@ -87,15 +88,14 @@ class CreatingPublishers
                 .expectNext(VALUE)
                 .verifyComplete();
 
+        final var emptyOptional = Mono.justOrEmpty(Optional.empty());
+
+        StepVerifier.create(emptyOptional)
+                .verifyComplete();
+
         final var nullValue = Mono.justOrEmpty(null);
 
         StepVerifier.create(nullValue)
-                .verifyComplete();
-
-        final var nonNullValue = Mono.justOrEmpty(VALUE);
-
-        StepVerifier.create(optionalWithValue)
-                .expectNext(VALUE)
                 .verifyComplete();
     }
 

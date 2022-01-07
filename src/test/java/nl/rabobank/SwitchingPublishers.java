@@ -35,13 +35,13 @@ class SwitchingPublishers
     @DisplayName("Switch to another publisher on empty")
     void switchOnEmpty()
     {
-        final var monoWithSwitch = emptyMono().switchIfEmpty(Mono.just(1));
+        final var monoWithSwitch = Mono.empty().switchIfEmpty(Mono.just(1));
 
         StepVerifier.create(monoWithSwitch)
                 .expectNext(1)
                 .verifyComplete();
 
-        final var fluxWithSwitch = emptyFlux().switchIfEmpty(Mono.just(1));
+        final var fluxWithSwitch = Flux.empty().switchIfEmpty(Mono.just(1));
 
         StepVerifier.create(fluxWithSwitch)
                 .expectNext(1)
@@ -58,13 +58,13 @@ class SwitchingPublishers
     @DisplayName("Publisher with a default value")
     void defaultIfEmpty()
     {
-        final var monoWithDefault = emptyMono().defaultIfEmpty(1);
+        final var monoWithDefault = Mono.empty().defaultIfEmpty(1);
 
         StepVerifier.create(monoWithDefault)
                 .expectNext(1)
                 .verifyComplete();
 
-        final var fluxWithDefault = emptyFlux().defaultIfEmpty(1);
+        final var fluxWithDefault = Flux.empty().defaultIfEmpty(1);
 
         StepVerifier.create(fluxWithDefault)
                 .expectNext(1)
@@ -132,18 +132,11 @@ class SwitchingPublishers
     @DisplayName("Return an error if the publisher is empty")
     void switchIfEmptyReturnError()
     {
-        final var errorOnEmptyMono = emptyMono().switchIfEmpty(Mono.error(new IllegalStateException("Publisher returned empty")));
+        final var errorOnEmptyMono = Mono.empty().switchIfEmpty(Mono.error(new IllegalStateException("Publisher returned empty")));
 
         StepVerifier.create(errorOnEmptyMono)
                 .verifyError(IllegalStateException.class);
     }
-
-    private Mono<Integer> emptyMono()
-    {
-        return Mono.empty();
-    }
-
-    private Flux<Integer> emptyFlux() { return Flux.empty(); }
 
     private Flux<Integer> switchFlux(final Flux<Integer> flux)
     {

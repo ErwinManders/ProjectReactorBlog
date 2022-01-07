@@ -41,7 +41,6 @@ class ConvertingPublishers
 
         final var next = flux.next();
         final var last = flux.last(2);
-        // final var single = flux.single();
 
         StepVerifier.create(next)
                 .expectNext(1)
@@ -61,9 +60,9 @@ class ConvertingPublishers
     @DisplayName("Repeating a value - keeping the original value and repeating x times")
     void repeatMono()
     {
-        final var flux = Mono.just(1).repeat(3);
+        final var monoRepeat = Mono.just(1).repeat(3);
 
-        StepVerifier.create(flux)
+        StepVerifier.create(monoRepeat)
                 .expectNextCount(4)
                 .verifyComplete();
     }
